@@ -50,14 +50,19 @@ The highlighted nodes are where human judgment is required. Everything else can 
 ## Structure
 
 ```
-docs/            # architecture decisions — what was chosen, what was rejected, why
-workflows/       # end-to-end SDLC workflows (the process definitions)
-patterns/        # reusable mechanics: scouts, gates, verification, the harness
+docs/             # architecture decisions — what was chosen, what was rejected, why
+workflows/        # end-to-end SDLC workflows (the process definitions)
+patterns/         # reusable mechanics: scouts, gates, verification, the harness
 .claude/
-├── skills/      # the single asset class: workflow stages + auto-activating standards
-├── agents/      # implementations that consume skills (scouts, planner, reviewer, verifier)
-└── hooks/       # deterministic harness: format, lint, typecheck on every edit
-examples/        # worked examples — real work taken through the workflows
+├── skills/       # the single asset class: workflow stages + auto-activating standards
+├── agents/       # implementations that consume skills (scouts, planner, reviewer, verifier)
+└── hooks/        # deterministic harness: format, lint, typecheck on every edit
+.claude-context/
+├── bugs/         # per-bug artifact trails (issue → investigation → plan → review → verification)
+├── specs/        # feature specs and plans
+├── templates/    # bug report, plan, PR — the shapes artifacts start from
+└── local/        # personal scratch, gitignored
+examples/         # worked examples — real work taken through the workflows
 ```
 
 Skills only — no separate commands directory. Skills are user-invocable by name and auto-activate by trigger; agents consume skill capabilities via frontmatter. See [docs/architecture-decisions.md](docs/architecture-decisions.md).

@@ -29,6 +29,14 @@ The single asset class of this agentic layer (see AD-2). Two kinds, one director
 | `validating-code-cleanup` | no dead code, debug artifacts, or drive-by changes | 🚧 planned |
 | `writing-plans` | plans that a gate can actually evaluate | 🚧 planned |
 
+## Consumption model (AD-9)
+
+Three paths, one asset class:
+
+- **Entrypoint skills** (the workflow-stage table above) — invoked explicitly by a human (`/bug`) or by orchestration (`claude -p "/bug <ref>"`). Frontmatter: `disable-model-invocation: true` + `argument-hint`. **Never allowed to auto-trigger.**
+- **Standards skills** (the standards table above) — auto-activate via trigger description.
+- **Agent-carried skills** — referenced in an agent's frontmatter; the agent brings the capability wherever it runs.
+
 ## Authoring rules
 
 1. One skill = one capability. Composition happens by stacking skills on agents (AD-3), not by growing a skill.

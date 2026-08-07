@@ -55,3 +55,23 @@ Distilled from practice and mentor guidance. Each decision records what was chos
 **Decision:** This repo contains only the agentic layer. Anything that isn't a workflow, pattern, skill, agent, hook, or worked example gets deleted.
 
 **Why:** "Aggressively reduce and delete everything that isn't the application layer or your agentic layer. Everything else is noise."
+
+## AD-9: Skill consumption model
+
+**Decision:** One asset class, three consumption paths — differentiated by frontmatter and consumer, not by directory:
+
+| Mode | What it is | How it's marked |
+|---|---|---|
+| **Entrypoint skills** | Workflow stages invoked explicitly — a human typing `/bug`, or an orchestration script running `claude -p "/bug <ref>"` | `disable-model-invocation: true`, `argument-hint` for inputs |
+| **Standards skills** | Auto-activate via trigger description while any work happens | trigger-style `description`, no invocation args |
+| **Agent-carried skills** | Capabilities a subagent carries via its definition (reviewer carries `validating-code-cleanup`, planner carries `writing-plans`) | referenced in the agent's frontmatter (AD-3) |
+
+**The one hard rule: entrypoint skills must never auto-trigger.** A pipeline needs deterministic stage boundaries; if a stage's logic can fire spontaneously because a description matched mid-conversation, the partition dissolves.
+
+**Why:** Invoking a skill by `/name` is identical to invoking a command by `/name` from the CLI's perspective, so programmatic orchestration (ADW-style Python chaining, phase 2) sits unchanged above entrypoint skills: `ADW → entrypoint skill → agents → standards skills`. Orchestration assumed *stable invocable names*, not a commands directory — skills provide them.
+
+## AD-10: `.claude-context/` — the artifact store
+
+**Decision:** Process *definitions* live in `.claude/` (the runnable layer). Process *outputs* live in `.claude-context/` (the artifact store): bug trails, specs, and the templates that shape them. `local/` inside it is gitignored personal scratch.
+
+**Why:** Later stages consume earlier stages' artifacts (`/plan` reads the investigation; review reads the plan), so artifact locations must be stable and predictable for both agents and humans. Keeping outputs out of `.claude/` keeps the deployable layer clean, and keeping them out of the repo root keeps projects clean. Invariant: artifacts live at the root the agent runs from.

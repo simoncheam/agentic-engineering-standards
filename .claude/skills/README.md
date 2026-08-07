@@ -1,15 +1,37 @@
 # Skills
 
-Auto-activating skills that enforce the standards while working — the always-on complement to the explicit commands.
+The single asset class of this agentic layer (see AD-2). Two kinds, one directory:
 
-Planned (general web/software development — no stack-specific or employer-specific skills here):
+- **Workflow-stage skills** — user-invoked by name (`/bug`, `/plan`). Each encodes one stage with a clear entry and exit. If a skill tries to do the whole lifecycle, it's hiding the gates.
+- **Standards skills** — auto-activating via trigger description. Each enforces one documented pattern while work happens.
+
+## Planned roster (populate from practice, not speculation)
+
+### Workflow stages (user-invoked)
+
+| Skill | Stage | Status |
+|---|---|---|
+| `bug` | intake → reproduction → investigation | 🚧 planned |
+| `plan` | investigation → reviewable, scout-grounded plan | 🚧 planned |
+| `implement` | approved plan → implementation | 🚧 planned |
+| `review` | implementation → review against the spec | 🚧 planned |
+| `verify` | change → demonstrated fix (runtime, not just types) | 🚧 planned |
+| `deploy-config` | sync this layer to `~/.claude/` or a target repo, with selective flags | 🚧 planned |
+
+### Standards (auto-activating)
 
 | Skill | Enforces | Status |
 |---|---|---|
 | `debugging` | reproduce → isolate → hypothesize → verify discipline | 🚧 planned |
 | `verifying-completion` | verification as a step, not an assumption | 🚧 planned |
 | `clarifying-requirements` | scope agreed before implementation | 🚧 planned |
-| `handling-errors` | defensive patterns on async/API boundaries | 🚧 planned |
+| `handling-errors` | defensive patterns at async/API boundaries | 🚧 planned |
 | `validating-code-cleanup` | no dead code, debug artifacts, or drive-by changes | 🚧 planned |
+| `writing-plans` | plans that a gate can actually evaluate | 🚧 planned |
 
-Authoring rule: every skill needs a trigger description specific enough to activate reliably, and each maps to a documented pattern or workflow step in this repo.
+## Authoring rules
+
+1. One skill = one capability. Composition happens by stacking skills on agents (AD-3), not by growing a skill.
+2. The trigger description is the contract: specific enough to activate reliably, honest enough not to over-trigger.
+3. Every skill maps to a documented workflow stage or pattern in this repo. A skill with no backing doc is a prompt, not a standard.
+4. Stack-specific conventions do not live here — they belong in each project's `CLAUDE.md`. This layer stays general.

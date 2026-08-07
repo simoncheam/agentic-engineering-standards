@@ -50,17 +50,27 @@ The highlighted nodes are where human judgment is required. Everything else can 
 ## Structure
 
 ```
+docs/            # architecture decisions — what was chosen, what was rejected, why
 workflows/       # end-to-end SDLC workflows (the process definitions)
-patterns/        # reusable mechanics: review gates, verification, failure modes
-.claude/         # runnable layer: commands, skills, hooks for Claude Code
+patterns/        # reusable mechanics: scouts, gates, verification, the harness
+.claude/
+├── skills/      # the single asset class: workflow stages + auto-activating standards
+├── agents/      # implementations that consume skills (scouts, planner, reviewer, verifier)
+└── hooks/       # deterministic harness: format, lint, typecheck on every edit
 examples/        # worked examples — real work taken through the workflows
 ```
 
-## Using this in your own project
+Skills only — no separate commands directory. Skills are user-invocable by name and auto-activate by trigger; agents consume skill capabilities via frontmatter. See [docs/architecture-decisions.md](docs/architecture-decisions.md).
 
-1. Copy [`.claude/`](.claude/) into your repo — the conventions template and workflow commands.
-2. Adapt `CLAUDE.md` to your project's stack and standards.
-3. Run the workflow on your next bug. Keep the artifacts.
+## Deployment (multi-repo)
+
+This repo is the canonical source. Three supported modes, in priority order:
+
+1. **User-level (`~/.claude/`)** — the daily driver. Skills follow you into every repo and editor window; zero per-repo deploys.
+2. **Per-repo** — `/deploy-config <target> [--minimal]` copies a selected slice into a repo that must be self-contained (public projects, CI, teams).
+3. **Workspace root** — `.claude/` at a workspace root with repos underneath, agent launched at the root.
+
+One source of truth; deploys are one-way pushes from here. Selective loading happens via flags, never by fragmenting the layer.
 
 ## What this is not
 

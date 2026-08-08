@@ -10,6 +10,7 @@ Each stage runs as a standalone skill with a clear entry and exit. Stages are ha
 
 | # | Stage | Skill | Exit criteria |
 |---|---|---|---|
+| 0 | Branch | `/branch` | clean tree; work branch created off a synced source branch |
 | 1 | Research & planning | `/start-ticket` | reproduction confirmed; scout-grounded plan approved at **Gate 1** |
 | 2 | Implementation | `/implement` | smallest change that fixes the cause; hooks green |
 | 3 | Review: spec + quality | `/review-against-spec` → `/quality-review` | change matches the approved plan; quality verdict recorded; both reviewed together at **Gate 2** |

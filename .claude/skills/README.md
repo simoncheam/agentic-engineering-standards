@@ -11,6 +11,7 @@ The single asset class of this agentic layer (see AD-2). Two kinds, one director
 
 | Skill | Stage | Status |
 |---|---|---|
+| [`branch`](branch/SKILL.md) | stage 0 — clean, synced work branch off the source branch, before any work | ✅ v0.1 |
 | [`start-ticket`](start-ticket/SKILL.md) | intake → context → plan, ends at Gate 1 (absorbs the earlier `bug`/`plan` split) | ✅ v0.1 |
 | `implement` | approved plan → implementation | 🚧 planned |
 | `review-against-spec` | implementation vs. the approved plan | 🚧 planned |

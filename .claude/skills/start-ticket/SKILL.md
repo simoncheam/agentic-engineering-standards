@@ -10,6 +10,10 @@ model: opus
 
 Stage 1 of the ticket workflow. This skill ends at **Gate 1: a plan awaiting human approval.** It never implements.
 
+## 0. Preflight — on a work branch?
+
+If the current branch is the repo's default branch, **stop** and ask the human to run `/branch` first. Work never starts on the default branch.
+
 ## 1. Resolve the ticket
 
 - **GitHub issue ref** (`#12`, `owner/repo#12`, or URL): pull with `gh issue view <ref> --json title,body,labels,comments`.

@@ -13,8 +13,8 @@ The single asset class of this agentic layer (see AD-2). Two kinds, one director
 |---|---|---|
 | [`branch`](branch/SKILL.md) | stage 0 — clean, synced work branch off the source branch, before any work | ✅ v0.1 |
 | [`start-ticket`](start-ticket/SKILL.md) | intake → context → plan, ends at Gate 1 (absorbs the earlier `bug`/`plan` split) | ✅ v0.1 |
-| `implement` | approved plan → implementation | 🚧 planned |
-| `review-against-spec` | implementation vs. the approved plan | 🚧 planned |
+| [`implement`](implement/SKILL.md) | approved plan → implementation, committed locally | ✅ v0.1 |
+| [`review-against-spec`](review-against-spec/SKILL.md) | implementation vs. the approved plan — report only | ✅ v0.1 |
 | [`quality-review`](quality-review/SKILL.md) | anti-patterns & best practices — auto-fix + report, ends at Gate 2 | ✅ v0.1 |
 | `verify` | change → demonstrated fix (runtime, not just types) | 🚧 planned |
 | `deploy-config` | sync this layer to `~/.claude/` or a target repo, with selective flags | 🚧 planned |

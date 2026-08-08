@@ -62,7 +62,7 @@ Distilled from practice and mentor guidance. Each decision records what was chos
 
 | Mode | What it is | How it's marked |
 |---|---|---|
-| **Entrypoint skills** | Workflow stages invoked explicitly — a human typing `/bug`, or an orchestration script running `claude -p "/bug <ref>"` | `disable-model-invocation: true`, `argument-hint` for inputs |
+| **Entrypoint skills** | Workflow stages invoked explicitly — a human typing `/start-ticket`, or an orchestration script running `claude -p "/start-ticket <ref>"` | `disable-model-invocation: true`, `argument-hint` for inputs |
 | **Standards skills** | Auto-activate via trigger description while any work happens | trigger-style `description`, no invocation args |
 | **Agent-carried skills** | Capabilities a subagent carries via its definition (reviewer carries `validating-code-cleanup`, planner carries `writing-plans`) | referenced in the agent's frontmatter (AD-3) |
 

@@ -10,9 +10,9 @@ Each stage runs as a standalone skill with a clear entry and exit. Stages are ha
 
 | # | Stage | Skill | Exit criteria |
 |---|---|---|---|
-| 1 | Research & planning | `/bug` → `/plan` | reproduction confirmed; scout-grounded plan approved at the gate |
+| 1 | Research & planning | `/start-ticket` | reproduction confirmed; scout-grounded plan approved at **Gate 1** |
 | 2 | Implementation | `/implement` | smallest change that fixes the cause; hooks green |
-| 3 | Review against spec | `/review` | change matches the approved plan; no scope creep |
+| 3 | Review: spec + quality | `/review-against-spec` → `/quality-review` | change matches the approved plan; quality verdict recorded; both reviewed together at **Gate 2** |
 | 4 | QA validation | `/verify` | affected flow exercised at runtime; fix demonstrated against the original reproduction |
 | 5 | PR & documentation | — | change packaged with its artifact trail |
 
@@ -25,4 +25,4 @@ Each stage runs as a standalone skill with a clear entry and exit. Stages are ha
 - [ ] **Implementation:** cause not symptom; no drive-by refactors
 - [ ] **Review + gate:** review against the *approved plan*, not against taste
 - [ ] **Verification:** runtime, against the original reproduction — not just tests passing (`patterns/harness.md`)
-- [ ] **Artifact trail:** each stage leaves its artifact (issue, investigation, plan, diff, review, verification) — this is what `examples/` captures
+- [ ] **Artifact trail:** each stage leaves its artifact (`01-issue` → `02-investigation` → `03-plan` → `04-implementation.diff` → `05-spec-review` → `06-quality-review` → `07-verification`) — this is what `examples/` captures

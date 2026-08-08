@@ -11,12 +11,14 @@ The single asset class of this agentic layer (see AD-2). Two kinds, one director
 
 | Skill | Stage | Status |
 |---|---|---|
-| `bug` | intake → reproduction → investigation | 🚧 planned |
-| `plan` | investigation → reviewable, scout-grounded plan | 🚧 planned |
+| [`start-ticket`](start-ticket/SKILL.md) | intake → context → plan, ends at Gate 1 (absorbs the earlier `bug`/`plan` split) | ✅ v0.1 |
 | `implement` | approved plan → implementation | 🚧 planned |
-| `review` | implementation → review against the spec | 🚧 planned |
+| `review-against-spec` | implementation vs. the approved plan | 🚧 planned |
+| [`quality-review`](quality-review/SKILL.md) | anti-patterns & best practices — auto-fix + report, ends at Gate 2 | ✅ v0.1 |
 | `verify` | change → demonstrated fix (runtime, not just types) | 🚧 planned |
 | `deploy-config` | sync this layer to `~/.claude/` or a target repo, with selective flags | 🚧 planned |
+
+Human gates: **Gate 1** — the plan is approved before `/implement` runs. **Gate 2** — spec-review + quality-review results are reviewed together before anything ships.
 
 ### Standards (auto-activating)
 
@@ -33,7 +35,7 @@ The single asset class of this agentic layer (see AD-2). Two kinds, one director
 
 Three paths, one asset class:
 
-- **Entrypoint skills** (the workflow-stage table above) — invoked explicitly by a human (`/bug`) or by orchestration (`claude -p "/bug <ref>"`). Frontmatter: `disable-model-invocation: true` + `argument-hint`. **Never allowed to auto-trigger.**
+- **Entrypoint skills** (the workflow-stage table above) — invoked explicitly by a human (`/start-ticket`) or by orchestration (`claude -p "/start-ticket <ref>"`). Frontmatter: `disable-model-invocation: true` + `argument-hint`. **Never allowed to auto-trigger.**
 - **Standards skills** (the standards table above) — auto-activate via trigger description.
 - **Agent-carried skills** — referenced in an agent's frontmatter; the agent brings the capability wherever it runs.
 

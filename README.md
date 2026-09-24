@@ -71,7 +71,7 @@ Skills only — no separate commands directory. Skills are user-invocable by nam
 
 This repo is the canonical source. Three supported modes, in priority order:
 
-1. **User-level (`~/.claude/`)** — the daily driver. Skills follow you into every repo and editor window; zero per-repo deploys.
+1. **User-level (`~/.claude/`)** — the daily driver. Skills follow you into every repo and editor window; zero per-repo deploys. Setup: symlink the skills per [docs/development.md](docs/development.md).
 2. **Per-repo** — `/deploy-config <target> [--minimal]` copies a selected slice into a repo that must be self-contained (public projects, CI, teams).
 3. **Workspace root** — `.claude/` at a workspace root with repos underneath, agent launched at the root.
 
@@ -86,6 +86,10 @@ One source of truth; deploys are one-way pushes from here. Selective loading hap
 ## Status
 
 Private, under active construction. Bug resolution is in daily use and being documented; feature development is being extracted from practice. The worked example will be captured live from a real fix before this repo goes public.
+
+## Credits
+
+The architecture here — agentic developer workflows, the harness, scout reconnaissance, a skills-based layer — is inspired by and adapted from **[IndyDevDan](https://www.youtube.com/@indydevdan)**'s agentic engineering course material and principles. The stage partition, the two review gates, the architecture decisions, and the implementation are my own; where they diverge from his reference patterns, the ADRs record why.
 
 ---
 

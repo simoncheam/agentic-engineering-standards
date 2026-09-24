@@ -8,7 +8,8 @@ Process **outputs** live here; process **definitions** live in `.claude/` (AD-10
 bugs/<id>/       # one directory per bug — the full artifact trail
                  #   01-issue.md … 06-verification.md (see workflows/bug-resolution.md)
 specs/           # feature specs and their plans (feature-development workflow)
-templates/       # the shapes artifacts start from
+templates/       # human-facing artifact shapes (bug report, PR); templates a
+                 #   skill consumes travel bundled inside that skill's directory
 local/           # personal scratch — gitignored, never committed
 ```
 

@@ -36,7 +36,7 @@ Per `patterns/scout-recon.md`: dispatch parallel scouts with distinct search dir
 
 ## 5. Write the plan
 
-From `.claude-context/templates/plan-template.md` → `03-plan.md` in the trail. Every section filled: problem, evidence (file refs from step 4), proposed change, out of scope, verification plan, risks.
+From the `plan-template.md` bundled in this skill's directory → `03-plan.md` in the trail. Every section filled: problem, evidence (file refs from step 4), proposed change, out of scope, verification plan, risks.
 
 ## 6. Stop at Gate 1
 

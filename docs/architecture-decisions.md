@@ -52,7 +52,7 @@ Distilled from practice and mentor guidance. Each decision records what was chos
 
 ## AD-8: Aggressive scope discipline
 
-**Decision:** This repo contains only the agentic layer. Anything that isn't a workflow, pattern, skill, agent, hook, or worked example gets deleted.
+**Decision:** This repo contains only the agentic layer. Anything that isn't a workflow, pattern, skill, agent, hook, orchestration script, or worked example gets deleted.
 
 **Why:** "Aggressively reduce and delete everything that isn't the application layer or your agentic layer. Everything else is noise."
 
@@ -75,3 +75,9 @@ Distilled from practice and mentor guidance. Each decision records what was chos
 **Decision:** Process *definitions* live in `.claude/` (the runnable layer). Process *outputs* live in `.claude-context/` (the artifact store): bug trails, specs, and the templates that shape them. `local/` inside it is gitignored personal scratch.
 
 **Why:** Later stages consume earlier stages' artifacts (`/plan` reads the investigation; review reads the plan), so artifact locations must be stable and predictable for both agents and humans. Keeping outputs out of `.claude/` keeps the deployable layer clean, and keeping them out of the repo root keeps projects clean. Invariant: artifacts live at the root the agent runs from.
+
+## AD-11: Orchestration — lives in `.claude/`, targets by explicit path
+
+**Decision:** Programmatic orchestration (the phase-2 ADW layer, AD-6/AD-9) lives in `.claude/orchestration/` — inside the monolithic `.claude/` per AD-1, never at the repo root. The orchestrator is invoked by path from this repo and takes its target repository as an explicit `--repo` absolute path: validated as a git repository, resolved once at launch, and checkpointed into run state so later phases and `--resume` read it from state rather than a re-passed flag. Every run uses single-repo semantics — the `claude` subprocess runs with cwd = the target repo, and artifacts land in the target's own `.claude-context/` (AD-10). Workspace-mode targeting (scanning repos under an `apps/` directory, prompt directives steering an agent at a subdirectory) is deferred behind a `resolve_target_repo()` seam until real cross-repo demand exists.
+
+**Why:** The reference architecture derives its execution root from the orchestrator's own file location, which forces copying the layer into every project it serves — the drift AD-5 exists to avoid. Taking the execution root as input decouples where the code lives from where it runs: one canonical orchestrator serves N repos with zero deploys, and skills reach the target via the user-level layer (AD-5 mode 1). Rejected alternatives: a root-level `orchestration/` directory (breaks AD-1's single-deploy visibility), cwd inference (fragile headless), and an environment variable (grows the environment surface the safe-env design shrinks).

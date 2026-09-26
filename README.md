@@ -28,11 +28,12 @@ flowchart LR
     C --> G1{Review gate:<br/>plan approved?}
     G1 -- no --> B
     G1 -- yes --> D[Implementation]
-    D --> G2{Review gate:<br/>change approved?}
+    D --> R[Review:<br/>spec + quality]
+    R --> V[Verification]
+    V -- fails --> B
+    V -- passes --> G2{Review gate:<br/>change approved?}
     G2 -- no --> D
-    G2 -- yes --> E[Verification]
-    E -- fails --> B
-    E -- passes --> F[Release]
+    G2 -- yes --> F[Release]
 
     style G1 fill:#f9e2c7,stroke:#c97a3d,color:#333
     style G2 fill:#f9e2c7,stroke:#c97a3d,color:#333
@@ -54,25 +55,26 @@ docs/             # architecture decisions — what was chosen, what was rejecte
 workflows/        # end-to-end SDLC workflows (the process definitions)
 patterns/         # reusable mechanics: scouts, gates, verification, the harness
 .claude/
-├── skills/       # the single asset class: workflow stages + auto-activating standards
-├── agents/       # implementations that consume skills (scouts, planner, reviewer, verifier)
+├── skills/       # primary asset class: workflow stages + auto-activating standards
+├── commands/     # prompt-only entrypoints (/prime)
+├── agents/       # implementations that consume skills (scout, reviewer, verifier)
 └── hooks/        # deterministic harness: format, lint, typecheck on every edit
 .claude-context/
 ├── bugs/         # per-bug artifact trails (issue → investigation → plan → review → verification)
 ├── specs/        # feature specs and plans
-├── templates/    # bug report, plan, PR — the shapes artifacts start from
+├── templates/    # bug report, PR — the shapes artifacts start from
 └── local/        # personal scratch, gitignored
 examples/         # worked examples — real work taken through the workflows
 ```
 
-Skills only — no separate commands directory. Skills are user-invocable by name and auto-activate by trigger; agents consume skill capabilities via frontmatter. See [docs/architecture-decisions.md](docs/architecture-decisions.md).
+Skills are the primary asset class — user-invocable by name and auto-activating by trigger; agents consume skill capabilities via frontmatter. `commands/` is kept for prompt-only entrypoints. See [docs/architecture-decisions.md](docs/architecture-decisions.md).
 
 ## Deployment (multi-repo)
 
 This repo is the canonical source. Three supported modes, in priority order:
 
 1. **User-level (`~/.claude/`)** — the daily driver. Skills follow you into every repo and editor window; zero per-repo deploys. Setup: symlink the skills per [docs/development.md](docs/development.md).
-2. **Per-repo** — `/deploy-config <target> [--minimal]` copies a selected slice into a repo that must be self-contained (public projects, CI, teams).
+2. **Per-repo** *(planned)* — `/deploy-config <target> [--minimal]` will copy a selected slice into a repo that must be self-contained (public projects, CI, teams).
 3. **Workspace root** — `.claude/` at a workspace root with repos underneath, agent launched at the root.
 
 One source of truth; deploys are one-way pushes from here. Selective loading happens via flags, never by fragmenting the layer.
@@ -85,11 +87,15 @@ One source of truth; deploys are one-way pushes from here. Selective loading hap
 
 ## Status
 
-Private, under active construction. Bug resolution is in daily use and being documented; feature development is being extracted from practice. The worked example will be captured live from a real fix before this repo goes public.
+Public, under active construction. Bug resolution is in daily use on my own projects and being documented; feature development is being extracted from practice. The worked example will be captured live from a real fix.
 
-## Credits
+## License
 
-The architecture here — agentic developer workflows, the harness, scout reconnaissance, a skills-based layer — is inspired by and adapted from **[IndyDevDan](https://www.youtube.com/@indydevdan)**'s agentic engineering course material and principles. The stage partition, the two review gates, the architecture decisions, and the implementation are my own; where they diverge from his reference patterns, the ADRs record why.
+MIT — see [LICENSE](LICENSE).
+
+## Provenance & credits
+
+This is my own agentic layer, built from scratch, following the agentic engineering principles taught in **[IndyDevDan](https://www.youtube.com/@indydevdan)**'s course. The stage partition, the two review gates, the architecture decisions, and every skill here are mine; where they diverge from the course's reference patterns, [the ADRs](docs/architecture-decisions.md) record why.
 
 ---
 

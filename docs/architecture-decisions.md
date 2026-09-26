@@ -1,20 +1,22 @@
 # Architecture Decisions
 
-Distilled from practice and mentor guidance. Each decision records what was chosen, what was rejected, and why — so the structure doesn't drift back toward rejected patterns.
+Distilled from practice and from IndyDevDan's agentic engineering course. Each decision records what was chosen, what was rejected, and why — so the structure doesn't drift back toward rejected patterns.
 
 ## AD-1: Monolithic `.claude/`, never plugins
 
 **Decision:** All skills, agents, and hooks live in one `.claude/` directory. No plugin split, no marketplace fragmentation.
 
-**Why:** Commands, skills, and agents reference each other through relative paths and shared discovery. Splitting them into plugins breaks path resolution, cross-agent discovery, and single-deploy workflows — and there is no dependency system between plugins. This was proven empirically: a plugin refactor of a large agentic layer broke the daily workflow chain and required a manual restore script, which itself proved the model couldn't stand alone.
+**Why:** Commands, skills, and agents reference each other through relative paths and shared discovery. Splitting them into plugins breaks path resolution, cross-agent discovery, and single-deploy workflows — and there is no dependency system between plugins.
 
 **The properties to preserve:** *visibility* (agents must be able to see everything) and *minimum distance to an update*.
 
-## AD-2: Skills only — no separate commands directory
+## AD-2: Skills first; `commands/` kept for prompt-only entrypoints
 
-**Decision:** One asset class. Workflow stages are user-invoked skills (`/bug`, `/plan`, `/implement`, `/verify`); standards are auto-activating skills. There is no `.claude/commands/`.
+**Decision:** Skills are the primary asset class. Workflow stages are user-invoked skills (`/branch`, `/start-ticket`, `/implement`, `/review-against-spec`, `/quality-review`, `/verify`); standards are auto-activating skills. `.claude/commands/` is retained for entrypoints that are a prompt and nothing else — currently `/prime`. New work defaults to a skill.
 
-**Why:** A skill is a superset of a command: invocable by name, auto-activating by trigger description, with frontmatter controlling model, tools, and behavior. Maintaining two asset classes doubles authoring rules, deploy logic, and sync surface. The convention is converging here anyway — "over time everything will be a skill and the frontmatter will customize it."
+**Why:** A skill is a superset of a command: invocable by `/name`, auto-activating by trigger description, and able to bundle supporting files. Claude Code's own guidance is that "custom commands have been merged into skills" and both forms create the same `/name`, so a command file stays valid and remains the lighter shape when there is nothing to bundle. The cost is honest: two asset classes mean two authoring conventions and a slightly larger sync surface, which is why anything with a template, script, or agent binding is a skill.
+
+**Superseded:** the original AD-2 forbade a commands directory outright. Retained as a documented exception rather than a drift.
 
 ## AD-3: Skills = capabilities, agents = implementations
 
@@ -74,7 +76,7 @@ Distilled from practice and mentor guidance. Each decision records what was chos
 
 **Decision:** Process *definitions* live in `.claude/` (the runnable layer). Process *outputs* live in `.claude-context/` (the artifact store): bug trails, specs, and the templates that shape them. `local/` inside it is gitignored personal scratch.
 
-**Why:** Later stages consume earlier stages' artifacts (`/plan` reads the investigation; review reads the plan), so artifact locations must be stable and predictable for both agents and humans. Keeping outputs out of `.claude/` keeps the deployable layer clean, and keeping them out of the repo root keeps projects clean. Invariant: artifacts live at the root the agent runs from.
+**Why:** Later stages consume earlier stages' artifacts (`/implement` reads the plan; review reads the implementation), so artifact locations must be stable and predictable for both agents and humans. Keeping outputs out of `.claude/` keeps the deployable layer clean, and keeping them out of the repo root keeps projects clean. Invariant: artifacts live at the root the agent runs from.
 
 ## AD-11: Orchestration — lives in `.claude/`, targets by explicit path
 

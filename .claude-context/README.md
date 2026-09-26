@@ -6,7 +6,7 @@ Process **outputs** live here; process **definitions** live in `.claude/` (AD-10
 
 ```
 bugs/<id>/       # one directory per bug — the full artifact trail
-                 #   01-issue.md … 06-verification.md (see workflows/bug-resolution.md)
+                 #   01-issue.md … 07-verification.md (see workflows/bug-resolution.md)
 specs/           # feature specs and their plans (feature-development workflow)
 templates/       # human-facing artifact shapes (bug report, PR); templates a
                  #   skill consumes travel bundled inside that skill's directory

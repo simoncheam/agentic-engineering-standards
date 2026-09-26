@@ -2,7 +2,7 @@
 
 The single asset class of this agentic layer (see AD-2). Two kinds, one directory:
 
-- **Workflow-stage skills** — user-invoked by name (`/bug`, `/plan`). Each encodes one stage with a clear entry and exit. If a skill tries to do the whole lifecycle, it's hiding the gates.
+- **Workflow-stage skills** — user-invoked by name (`/start-ticket`, `/implement`). Each encodes one stage with a clear entry and exit. If a skill tries to do the whole lifecycle, it's hiding the gates.
 - **Standards skills** — auto-activating via trigger description. Each enforces one documented pattern while work happens.
 
 ## Planned roster (populate from practice, not speculation)

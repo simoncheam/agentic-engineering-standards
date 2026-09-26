@@ -28,4 +28,4 @@
 
 ---
 
-*A report missing reproduction steps or expected-vs-actual is not gate-ready — the `/bug` stage will stop and ask before investigating.*
+*A report missing reproduction steps or expected-vs-actual is not gate-ready — `/start-ticket` will stop and ask before investigating.*

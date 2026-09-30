@@ -36,6 +36,39 @@ claude -p "/branch" --output-format text
 
 Expected: the skill expands and asks for a name, mutating nothing. If Claude instead treats `/branch` as literal text, user-level discovery isn't working — check that the symlink resolves (`ls -la ~/.claude/skills/`) and that `HOME` is intact in the environment you're running under.
 
+## Installing the agents (user-level, symlinked)
+
+Same mechanism, one link per agent file (`~/.claude/agents/` is scanned recursively for `*.md`; the roster README is skipped because it has no frontmatter):
+
+```bash
+mkdir -p ~/.claude/agents
+for a in .claude/agents/*.md; do
+  name=$(basename "$a")
+  [ "$name" = README.md ] && continue
+  ln -sfn "$(pwd)/$a" ~/.claude/agents/"$name"
+done
+```
+
+Claude Code watches `~/.claude/agents/` for edits, but only if the directory existed when the session started — after the first install, restart running sessions. Verify with `ls -la ~/.claude/agents/`; every link resolves into this repo.
+
+## Name precedence
+
+Both layers can define the same name. Per the Claude Code docs (skills: "personal over project"; subagents: `.claude/agents/` priority 3, `~/.claude/agents/` priority 4; a skill beats a same-named `.claude/commands/` file):
+
+| Asset | Same name at user level and project level | Consequence for this layer |
+|---|---|---|
+| Skill | **user-level wins** | An installed skill from here shadows a project's same-named skill or command everywhere — including a workspace root that keeps private commands under the same names. Rename nothing; know which one runs. |
+| Agent | **project-level wins** — `.claude/agents/` found walking up from the cwd to the repository root | Inside `apps/<repo>` only that repo's agents and the user-level ones are visible; a workspace-root `.claude/agents/` above the repo is not discovered from inside it. |
+
+**Interactive use runs from inside the target repo.** Entrypoint skills assume the cwd is the target; a `--repo` ladder on the skills themselves stays deferred (AD-11). The workspace root is never a target.
+
+## Headless runs
+
+A headless run (`claude -p "/<skill> <args>"`) reaches the layer via the user-level install, or via `--add-dir <this repo>` for a checkout that isn't installed. Two settings the proofs needed:
+
+- `--settings '{"attribution":false}'` — a commit carrying the default `Co-Authored-By` trailer is denied in `-p` mode (no prompt can approve it), so `/implement` and `/build-from-spec` cannot commit without this. Requires Claude Code ≥ 2.1.281.
+- `--permission-mode acceptEdits` plus `--allowedTools 'Bash(git:*)' 'Bash(<test runner>:*)'` — the trail writes and the read-only git the agents use.
+
 ## Editing skills
 
 1. Edit the skill in this repo (`.claude/skills/<name>/SKILL.md`). Because of the symlinks, the change is live in every session immediately — no redeploy step.
@@ -65,4 +98,6 @@ Headless runs need only a minimal environment: `HOME`, `PATH`, `USER`, `SHELL`, 
 | 2026-08-20 | Skill-bundled template convention | This file · `.claude-context/README.md` |
 | 2026-08-20 | Orchestration location & `--repo` targeting | AD-11 in `architecture-decisions.md` |
 | 2026-09-24 | Feature development runs on entrypoint skills (`/branch` → `/start-ticket` → Gate 1 → `/implement` → `/review-against-spec` → `/quality-review` → Gate 2) | `workflows/feature-development.md` |
+| 2026-09-29 | Agents installed by the user-level symlink loop; name precedence recorded; interactive use runs from inside the target repo | This file |
+| 2026-09-29 | Headless runs: `attribution: false` + explicit allowlists | This file |
 | 2026-09-29 | Review fix loop: a `fail` writes `fix-plans/<kind>-<N>.md` → `/build-from-spec` → re-run the review; verdict line + `Attempt: N` contract | `.claude-context/README.md` · `build-from-spec/SKILL.md` · AD-13 |

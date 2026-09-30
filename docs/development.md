@@ -65,4 +65,4 @@ Headless runs need only a minimal environment: `HOME`, `PATH`, `USER`, `SHELL`, 
 | 2026-08-20 | Skill-bundled template convention | This file · `.claude-context/README.md` |
 | 2026-08-20 | Orchestration location & `--repo` targeting | AD-11 in `architecture-decisions.md` |
 | 2026-09-24 | Feature development runs on entrypoint skills (`/branch` → `/start-ticket` → Gate 1 → `/implement` → `/review-against-spec` → `/quality-review` → Gate 2) | `workflows/feature-development.md` |
-| 2026-09-29 | Review fix loop: a `fail` writes `fix-plans/<kind>-<N>.md` → `/build-from-spec` → re-run the review; verdict line + `Attempt: N` contract | `.claude-context/README.md` · `build-from-spec/SKILL.md` |
+| 2026-09-29 | Review fix loop: a `fail` writes `fix-plans/<kind>-<N>.md` → `/build-from-spec` → re-run the review; verdict line + `Attempt: N` contract | `.claude-context/README.md` · `build-from-spec/SKILL.md` · AD-13 |

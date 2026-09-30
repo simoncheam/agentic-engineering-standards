@@ -28,12 +28,12 @@ If the current branch is the repo's default branch, **stop** and ask the human t
 
 ## 3. Classify and apply the right discipline
 
-- **Bug:** reproduce before diagnosing. Run the app or test and confirm the failure exists as described. No reproduction, no investigation — if it can't be reproduced, stop and report exactly what was tried. Record the steps and observed failure under `## Reproduction` in `01-context-analysis.md`.
+- **Bug:** reproduce before diagnosing. Run the app or test and confirm the failure exists as described. No reproduction, no investigation — if it can't be reproduced, stop and report exactly what was tried. Record the steps and observed failure under `## Reproduction` in `01-context-analysis.md`. Then dispatch the [`scout-diagnose`](../../agents/scout-diagnose.md) agent — one instance per hypothesis, in parallel — with the reproduction and the hypothesis; its diagnosis (failing path, root cause, suggested fix, as `path:start-end` refs) goes into the findings in step 4.
 - **Feature:** restate the scope in your own words and list what is explicitly out of scope. Ambiguity in acceptance criteria gets asked about now, not discovered during implementation.
 
 ## 4. Gather grounded context (scout reconnaissance)
 
-Per `patterns/scout-recon.md`: dispatch parallel scouts with distinct search directions — affected surfaces / existing conventions / tests & validation. Each scout's raw report goes to `scout/<direction>.md` in the trail (this creates the folder). Consolidate into `01-context-analysis.md` as structured references (`path:start-end`), not prose — findings by direction, integration points, risks, open questions. A question that blocks the plan is asked now.
+Per `patterns/scout-recon.md`: dispatch the [`scout`](../../agents/scout.md) agent in parallel, one instance per search direction — affected surfaces / existing conventions / tests & validation. Each scout's raw report goes to `scout/<direction>.md` in the trail (this creates the folder). Consolidate into `01-context-analysis.md` as structured references (`path:start-end`), not prose — findings by direction, integration points, risks, open questions. A question that blocks the plan is asked now.
 
 ## 5. Write the plan
 

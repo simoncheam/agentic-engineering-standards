@@ -67,7 +67,8 @@ Both layers can define the same name. Per the Claude Code docs (skills: "persona
 A headless run (`claude -p "/<skill> <args>"`) reaches the layer via the user-level install, or via `--add-dir <this repo>` for a checkout that isn't installed. Two settings the proofs needed:
 
 - `--settings '{"attribution":false}'` — a commit carrying the default `Co-Authored-By` trailer is denied in `-p` mode (no prompt can approve it), so `/implement` and `/build-from-spec` cannot commit without this. Requires Claude Code ≥ 2.1.281.
-- `--permission-mode acceptEdits` plus `--allowedTools 'Bash(git:*)' 'Bash(<test runner>:*)'` — the trail writes and the read-only git the agents use.
+- `--permission-mode acceptEdits` plus `--allowedTools 'Bash(git:*)' 'Bash(cp:*)' 'Bash(mkdir:*)' 'Bash(<test runner>:*)'` — the trail writes, the template copy, and the read-only git the agents use. Allow rules match one command; a compound line (`cmd; echo $?`) is denied, so skills and agents keep commands simple.
+- `--add-dir ~/.claude/skills` — a bundled template (`${CLAUDE_SKILL_DIR}/…`) sits outside the target repo, and a headless session can't prompt for the read. Interactive sessions prompt instead.
 
 ## Checks (CI)
 

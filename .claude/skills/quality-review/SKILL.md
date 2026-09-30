@@ -2,7 +2,7 @@
 name: quality-review
 description: Final quality gate for an implemented change — auto-fixes mechanical findings, reports judgment findings. Entrypoint skill; invoke explicitly after /review-against-spec. Never auto-triggers.
 disable-model-invocation: true
-argument-hint: "[path to artifact trail (defaults to the current change)]"
+argument-hint: "[path to ticket trail (defaults to the current change)]"
 ---
 
 # /quality-review — is it built well?
@@ -11,7 +11,7 @@ Runs after `/review-against-spec`, and asks a different question: spec review as
 
 ## 1. Scope the review
 
-Diff the implemented change (working tree, or the trail's `04-implementation.diff`). Only changed code and its immediate blast radius are in scope. Pre-existing issues outside the change: note them in the report as follow-ups — do not fix them.
+Diff the implemented change (working tree, or the trail's `03-implementation.diff`). Only changed code and its immediate blast radius are in scope. Pre-existing issues outside the change: note them in the report as follow-ups — do not fix them.
 
 ## 2. Two classes of findings
 
@@ -40,7 +40,7 @@ Mechanical fixes run here, where the harness and project tooling live. Judgment 
 - the mechanical fixes you applied, each with a one-line what and why
 - the contract below, with `${CLAUDE_SKILL_DIR}/../build-from-spec/fix-plan-template.md` as the fix-plan template
 
-The reviewer writes `06-quality-review.md` in the trail:
+The reviewer writes `05-quality-review.md` in the trail:
 
 - header line `Attempt: N` — `N` = the number of `fix-plans/quality-*.md` already in the trail, plus 1
 - fixes applied (mechanical), as you reported them
@@ -58,5 +58,5 @@ Present the verdict alongside the spec-review result. On fail: `Next: /build-fro
 
 - [ ] Mechanical findings fixed and harness re-verified clean
 - [ ] Judgment pass run by `reviewer` on the post-fix diff — findings with locations and suggestions, none silently fixed
-- [ ] `06-quality-review.md` carries `Attempt: N` and ends with the `Verdict:` line; on fail, a complete fix plan in `fix-plans/`
+- [ ] `05-quality-review.md` carries `Attempt: N` and ends with the `Verdict:` line; on fail, a complete fix plan in `fix-plans/`
 - [ ] Stopped — no commit or PR

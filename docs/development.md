@@ -41,7 +41,7 @@ Expected: the skill expands and asks for a name, mutating nothing. If Claude ins
 1. Edit the skill in this repo (`.claude/skills/<name>/SKILL.md`). Because of the symlinks, the change is live in every session immediately — no redeploy step.
 2. Commit normally. All version control happens in this repo; `~/.claude/skills/` holds only pointers with no history of their own.
 
-**Convention — skill-bundled templates:** a template that a *skill* consumes lives inside that skill's directory (e.g. `.claude/skills/start-ticket/plan-template.md`) so it travels with the skill to any machine or repo. `.claude-context/templates/` holds only human-facing shapes (bug report, PR) that no skill depends on.
+**Convention — skill-bundled templates:** a template that a *skill* consumes lives inside that skill's directory (e.g. `.claude/skills/start-ticket/ticket-template/`) so it travels with the skill to any machine or repo. `.claude-context/templates/` holds only human-facing shapes (bug report, PR) that no skill depends on.
 
 ## Deployment modes (summary)
 

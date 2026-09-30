@@ -10,7 +10,7 @@ How to take a feature ticket from intake to a reviewed, shippable change using t
 
 ## How It Works
 
-Each skill reads the artifacts the previous stage left and writes its own into the ticket's **artifact trail** (`.claude-context/specs/<slug>/`). Planning feeds implementation; implementation feeds review. A skill that finds its input missing or malformed stops and asks rather than guessing.
+Each skill reads the artifacts the previous stage left and writes its own into the ticket's **artifact trail** (`.claude-context/tickets/<ticket-id>/`, laid out by the [ticket template](../.claude/skills/start-ticket/ticket-template/README.md)). Planning feeds implementation; implementation feeds review. A skill that finds its input missing or malformed stops and asks rather than guessing.
 
 There are two **human gates**:
 
@@ -65,22 +65,23 @@ There are two **human gates**:
 
 **What it does:**
 
-1. Pulls the ticket (GitHub issue via `gh`, or a local file).
+1. Pulls the ticket (GitHub issue via `gh`, or a local file) and creates the trail from the skill's bundled ticket template — the three numbered files, no subfolders.
 2. Enforces the intake contract: a feature ticket must state the desired outcome **with acceptance criteria**. If it doesn't, the skill stops and asks.
 3. Restates scope in its own words and lists what is **explicitly out of scope**. Ambiguous criteria get asked about now, not discovered during implementation.
-4. Runs scout reconnaissance (`patterns/scout-recon.md`) — parallel searches for affected surfaces, existing conventions, and tests — consolidated as `path:start-end` references.
-5. Writes the plan from the skill's bundled `plan-template.md`.
+4. Runs scout reconnaissance (`patterns/scout-recon.md`) — parallel searches for affected surfaces, existing conventions, and tests — raw reports in `scout/`, consolidated as `path:start-end` references.
+5. Writes the plan, with every acceptance criterion mapped to a planned change.
 
 **Why:** Every later stage reads from the plan. If the plan is wrong, everything downstream is wrong.
 
 **Output:**
 
 ```
-.claude-context/specs/<slug>/
-  01-issue.md            # Resolved ticket
-  02-investigation.md    # Confirmed scope, out-of-scope list, scout findings
-  03-plan.md             # The spec: problem, evidence, proposed change,
-                         #   out of scope, verification plan, risks
+.claude-context/tickets/<ticket-id>/
+  00-ticket-details.md       # Resolved ticket, acceptance criteria as AC-n
+  01-context-analysis.md     # Confirmed scope, out-of-scope list, scout findings
+  02-implementation-plan.md  # The spec: problem, evidence, proposed change, files,
+                             #   AC coverage, out of scope, verification plan, risks
+  scout/                     # Raw scout reports, one per direction
 ```
 
 The skill stops here. It never implements.
@@ -89,15 +90,15 @@ The skill stops here. It never implements.
 
 ### Gate 1: Approve the Plan
 
-Read `03-plan.md`. Check that:
+Read `02-implementation-plan.md`. Check that:
 
-- every acceptance criterion from `01-issue.md` maps to part of the proposed change
+- every `AC-n` from `00-ticket-details.md` has a row in the plan's AC coverage table
 - the out-of-scope list matches what you intend
 - the verification plan would actually demonstrate the feature working
 
 **Approve:** proceed to Step 2. Invoking `/implement` *is* the approval signal.
 
-**Request changes:** tell Claude what's wrong and have it revise `03-plan.md`, or re-run `/start-ticket` if the scope or investigation itself was off. Don't implement from a plan you'd only half approve — an approval covers what was approved, nothing else.
+**Request changes:** tell Claude what's wrong and have it revise `02-implementation-plan.md`, or re-run `/start-ticket` if the scope or investigation itself was off. Don't implement from a plan you'd only half approve — an approval covers what was approved, nothing else.
 
 **Reject:** stop. Fix the ticket first.
 
@@ -106,21 +107,21 @@ Read `03-plan.md`. Check that:
 ### Step 2: Implement
 
 ```
-/implement .claude-context/specs/<slug>
+/implement .claude-context/tickets/<ticket-id>
 ```
 
-**What it does:** Verifies the plan is complete and you're on a work branch. Reads `03-plan.md` **and** `02-investigation.md`. Implements the proposed change — and only that. Keeps hooks (format / lint / typecheck) and existing tests green. Captures the change and commits locally.
+**What it does:** Verifies the plan is complete and you're on a work branch. Reads `02-implementation-plan.md` **and** `01-context-analysis.md`. Implements the proposed change — and only that, within the plan's files. Keeps hooks (format / lint / typecheck) and existing tests green. Captures the change and commits locally.
 
 **Binding rules:**
 
-- The plan's out-of-scope list is binding. Tempting refactors and adjacent fixes get noted, not done.
+- The plan's files and out-of-scope list are binding. Tempting refactors and adjacent fixes get noted, not done.
 - If implementation shows the plan is wrong, the skill **stops and routes back to Gate 1** instead of improvising a different design under the old approval.
 
 **Output:** a local commit on the work branch (nothing pushed), plus:
 
 ```
-.claude-context/specs/<slug>/
-  04-implementation.diff   # The change, with brief notes
+.claude-context/tickets/<ticket-id>/
+  03-implementation.diff   # The change, with brief notes
 ```
 
 ---
@@ -128,7 +129,7 @@ Read `03-plan.md`. Check that:
 ### Step 3: Review Against Spec
 
 ```
-/review-against-spec .claude-context/specs/<slug>
+/review-against-spec .claude-context/tickets/<ticket-id>
 ```
 
 **What it does:** Compares the implementation to the **approved plan**. Classifies each planned element as *implemented*, *partial*, or *missing*. Walks the diff in reverse to flag *unplanned* changes and *scope violations*. Checks the verification plan still fits what was actually built.
@@ -142,8 +143,9 @@ Read `03-plan.md`. Check that:
 **Output:**
 
 ```
-.claude-context/specs/<slug>/
-  05-spec-review.md   # Per-item table, scope violations, verdict: pass | fail
+.claude-context/tickets/<ticket-id>/
+  04-spec-review.md   # Per-item table, scope violations, verdict: pass | fail
+  fix-plans/spec-<N>.md   # On fail: the fix plan /build-from-spec executes
 ```
 
 A missing item, an unexplained unplanned change, or any scope violation is a **fail**.
@@ -153,7 +155,7 @@ A missing item, an unexplained unplanned change, or any scope violation is a **f
 ### Step 4: Quality Review
 
 ```
-/quality-review [.claude-context/specs/<slug>]
+/quality-review [.claude-context/tickets/<ticket-id>]
 ```
 
 **What it does:** Reviews the change (not the repo) to a senior engineer's standard, with two classes of findings:
@@ -168,9 +170,10 @@ Pre-existing issues outside the change are noted as follow-ups, not fixed.
 **Output:**
 
 ```
-.claude-context/specs/<slug>/
-  06-quality-review.md   # Fixes applied, judgment findings (file:line),
-                         #   verdict: pass | pass with findings | fail
+.claude-context/tickets/<ticket-id>/
+  05-quality-review.md      # Fixes applied, judgment findings (file:line),
+                            #   verdict: pass | pass-with-findings | fail
+  fix-plans/quality-<N>.md  # On fail: the fix plan /build-from-spec executes
 ```
 
 The skill stops at Gate 2. It does not commit, push, or open a PR.
@@ -179,7 +182,7 @@ The skill stops at Gate 2. It does not commit, push, or open a PR.
 
 ### Gate 2: Review Both Results Together
 
-Read `05-spec-review.md` and `06-quality-review.md` side by side.
+Read `04-spec-review.md` and `05-quality-review.md` side by side.
 
 | Spec review | Quality review | Next |
 | ----------- | -------------- | ---- |
@@ -195,7 +198,7 @@ If the same gap keeps surviving the loop, stop looping. Read the reports and dec
 
 ### Step 5: Verify *(planned: `/verify`)*
 
-Exercise the feature end to end at runtime against the plan's verification plan — not just tests and type checks passing (`patterns/verification.md`). Until `/verify` exists, do this by hand and record what you did in `07-verification.md`.
+Exercise the feature end to end at runtime against the plan's verification plan — not just tests and type checks passing (`patterns/verification.md`). Until `/verify` exists, do this by hand and record what you did in `06-verification.md`, with any screenshots or logs in `evidence/`.
 
 ---
 
@@ -224,17 +227,18 @@ Only after Gate 2 and verification pass. Push the branch and open the PR from `.
 ## Where Files Live
 
 ```
-.claude-context/specs/<slug>/
-  01-issue.md               # Resolved ticket              (Step 1)
-  02-investigation.md       # Scope + scout findings       (Step 1)
-  03-plan.md                # The spec, approved at Gate 1 (Step 1)
-  04-implementation.diff    # The change + notes           (Step 2)
-  05-spec-review.md         # Did we build what we said?   (Step 3)
-  06-quality-review.md      # Is it built well?            (Step 4)
-  07-verification.md        # Runtime evidence             (Step 5)
+.claude-context/tickets/<ticket-id>/
+  00-ticket-details.md       # Resolved ticket, AC-n         (Step 1)
+  01-context-analysis.md     # Scope + scout findings        (Step 1)
+  02-implementation-plan.md  # The spec, approved at Gate 1  (Step 1)
+  03-implementation.diff     # The change + notes            (Step 2)
+  04-spec-review.md          # Did we build what we said?    (Step 3)
+  05-quality-review.md       # Is it built well?             (Step 4)
+  06-verification.md         # Runtime evidence              (Step 5)
+  scout/ fix-plans/ …        # Subfolders, created on demand by the stage that writes them
 ```
 
-One ticket, one directory, numbered artifacts. Every stage reads from and writes to the same trail, so later stages consume earlier files by name.
+One ticket, one directory, numbered artifacts. Every stage reads from and writes to the same trail, so later stages consume earlier files by name. The full layout, including every subfolder, is in the [ticket template README](../.claude/skills/start-ticket/ticket-template/README.md).
 
 ---
 

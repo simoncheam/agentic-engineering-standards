@@ -60,8 +60,7 @@ patterns/         # reusable mechanics: scouts, gates, verification, the harness
 ├── agents/       # isolated contexts that entrypoint skills fork into or dispatch
 └── hooks/        # deterministic harness — planned, none built yet: format, lint, typecheck
 .claude-context/
-├── bugs/         # per-bug artifact trails (issue → investigation → plan → review → verification)
-├── specs/        # feature specs and plans
+├── tickets/      # one artifact trail per ticket (details → analysis → plan → diff → reviews → verification)
 ├── templates/    # bug report, PR — the shapes artifacts start from
 └── local/        # personal scratch, gitignored
 examples/         # worked examples — real work taken through the workflows

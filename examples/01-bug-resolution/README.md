@@ -6,10 +6,10 @@ This example will be captured **live** from the next real bug fixed in a persona
 
 Planned artifacts, in order:
 
-1. `01-issue.md` — the bug as reported
-2. `02-investigation.md` — reproduction and evidence
-3. `03-plan.md` — the plan as approved at Gate 1
-4. `04-implementation.diff` — the change
-5. `05-spec-review.md` — the change reviewed against the approved plan
-6. `06-quality-review.md` — mechanical fixes applied, judgment findings, verdict
-7. `07-verification.md` — the fix demonstrated against the original reproduction
+1. `00-ticket-details.md` — the bug as reported, with its acceptance criteria
+2. `01-context-analysis.md` — reproduction and evidence
+3. `02-implementation-plan.md` — the plan as approved at Gate 1
+4. `03-implementation.diff` — the change
+5. `04-spec-review.md` — the change reviewed against the approved plan
+6. `05-quality-review.md` — mechanical fixes applied, judgment findings, verdict
+7. `06-verification.md` — the fix demonstrated against the original reproduction

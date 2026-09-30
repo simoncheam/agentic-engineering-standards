@@ -32,7 +32,7 @@ Do not improvise or "fix" the fix plan. Report the step, what it says, and what 
 
 ## 5. Record and commit locally
 
-- Re-capture the change: `git diff <source>...HEAD` plus uncommitted work → `04-implementation.diff` in the trail, with a note naming the fix plan applied. The re-review reads it.
+- Re-capture the change: `git diff <source>...HEAD` plus uncommitted work → `03-implementation.diff` in the trail, with a note naming the fix plan applied. The re-review reads it.
 - Commit on the work branch with a conventional message. **Do not push.**
 
 ## 6. Stop
@@ -44,4 +44,4 @@ Report: tasks completed, files touched, validation results. Print the next step:
 - [ ] Every task executed in order — or a clean stop naming the blocker
 - [ ] Only listed files touched (`git diff --name-only` ⊆ Files to Modify ∪ Files to Create)
 - [ ] Validation commands and existing tests pass
-- [ ] `04-implementation.diff` re-captured; committed locally; nothing pushed
+- [ ] `03-implementation.diff` re-captured; committed locally; nothing pushed

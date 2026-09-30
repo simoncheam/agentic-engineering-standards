@@ -26,4 +26,4 @@ Each stage runs as a standalone skill with a clear entry and exit. Stages are ha
 - [ ] **Implementation:** cause not symptom; no drive-by refactors
 - [ ] **Review + gate:** review against the *approved plan*, not against taste
 - [ ] **Verification:** runtime, against the original reproduction — not just tests passing (`patterns/harness.md`)
-- [ ] **Artifact trail:** each stage leaves its artifact (`01-issue` → `02-investigation` → `03-plan` → `04-implementation.diff` → `05-spec-review` → `06-quality-review` → `07-verification`) — this is what `examples/` captures
+- [ ] **Artifact trail:** each stage leaves its artifact in `.claude-context/tickets/<ticket-id>/` (`00-ticket-details` → `01-context-analysis` → `02-implementation-plan` → `03-implementation.diff` → `04-spec-review` → `05-quality-review` → `06-verification`; layout in the [ticket template](../.claude/skills/start-ticket/ticket-template/README.md)) — this is what `examples/` captures

@@ -6,7 +6,7 @@
 
 ## Artifact trail
 
-<link the trail this change came from — e.g. `.claude-context/bugs/<id>/`>
+<link the trail this change came from — e.g. `.claude-context/tickets/<ticket-id>/`>
 
 ## Changes
 

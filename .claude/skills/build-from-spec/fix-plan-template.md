@@ -1,6 +1,6 @@
 # Fix Plan: <trail id> — <short title>
 
-Source: <05-spec-review.md | 06-quality-review.md>
+Source: <04-spec-review.md | 05-quality-review.md>
 Attempt: <N>
 
 > Consumable by /build-from-spec. Every section below is required; write "None" rather than omitting.

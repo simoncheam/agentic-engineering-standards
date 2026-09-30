@@ -15,12 +15,12 @@ The single asset class of this agentic layer (see AD-2). Two kinds, one director
 | [`start-ticket`](start-ticket/SKILL.md) | intake → context → plan, ends at Gate 1 (absorbs the earlier `bug`/`plan` split) | ✅ v0.1 |
 | [`implement`](implement/SKILL.md) | approved plan → implementation, committed locally | ✅ v0.1 |
 | [`review-against-spec`](review-against-spec/SKILL.md) | implementation vs. the approved plan — report only | ✅ v0.1 |
-| [`quality-review`](quality-review/SKILL.md) | anti-patterns & best practices — auto-fix + report, ends at Gate 2 | ✅ v0.1 |
+| [`quality-review`](quality-review/SKILL.md) | anti-patterns & best practices — auto-fix + judgment pass in `reviewer` | ✅ v0.1 |
 | [`build-from-spec`](build-from-spec/SKILL.md) | review `fail` → the fix plan it wrote, executed within its file list, committed locally | ✅ v0.1 |
-| `verify` | change → demonstrated fix (runtime, not just types) | 🚧 planned |
+| `verify` | change → demonstrated fix (runtime, not just types), forks into `verifier`; ends at Gate 2 | 🚧 planned |
 | `deploy-config` | sync this layer to `~/.claude/` or a target repo, with selective flags | 🚧 planned |
 
-Human gates: **Gate 1** — the plan is approved before `/implement` runs. **Gate 2** — spec-review + quality-review results are reviewed together before anything ships.
+Human gates: **Gate 1** — the plan is approved before `/implement` runs. **Gate 2** — spec review, quality review and verification evidence are read together before anything leaves the machine.
 
 ### Standards (auto-activating)
 

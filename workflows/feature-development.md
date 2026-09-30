@@ -15,7 +15,7 @@ Each skill reads the artifacts the previous stage left and writes its own into t
 There are two **human gates**:
 
 - **Gate 1 — plan approval.** Nothing is implemented until you approve the plan.
-- **Gate 2 — review.** The spec-review and quality-review results are read together before anything leaves your machine.
+- **Gate 2 — review.** The spec review, the quality review and the verification evidence are read together before anything leaves your machine.
 
 ---
 
@@ -30,13 +30,13 @@ There are two **human gates**:
          |
   2. /implement            Builds the approved plan, commits locally
          |
-  3. /review-against-spec  Did we build what we said?   (report only)
+  3. /review-against-spec  Did we build what we said?   (report only, in `reviewer`)
+         |                 fail → fix plan → /build-from-spec → re-review
+  4. /quality-review       Is it built well?            (auto-fix, judgment in `reviewer`)
+         |                 fail → fix plan → /build-from-spec → re-review
+  5. Verify                Does it work at runtime?     (`verifier`; /verify — planned)
          |
-  4. /quality-review       Is it built well?            (auto-fix + report)
-         |
-     ── Gate 2 ──          Both pass? No → back to /implement, or to Gate 1
-         |
-  5. Verify                Exercise the feature at runtime   (/verify — planned)
+     ── Gate 2 ──          Reviews + evidence pass? No → fix plan, /implement, or Gate 1
          |
   6. PR                    Package the change with its trail (no skill yet)
 ```
@@ -180,25 +180,28 @@ The skill stops at Gate 2. It does not commit, push, or open a PR.
 
 ---
 
-### Gate 2: Review Both Results Together
+### Step 5: Verify *(planned: `/verify`)*
 
-Read `04-spec-review.md` and `05-quality-review.md` side by side.
-
-| Spec review | Quality review | Next |
-| ----------- | -------------- | ---- |
-| pass | pass | Proceed to verification |
-| pass | pass with findings | Decide per finding: accept, or back to `/implement` |
-| fail — implementation gap | any | Back to `/implement`, then re-run both reviews |
-| fail — the plan was wrong | any | Back to Gate 1 — revise the plan first |
-| pass | fail | Back to `/implement` for the flagged findings |
-
-If the same gap keeps surviving the loop, stop looping. Read the reports and decide whether the plan was unrealistic or the approach needs to change. This is where human judgment matters.
+Exercise the feature end to end at runtime against the plan's verification plan — not just tests and type checks passing (`patterns/verification.md`). This is the `verifier` agent's job: it re-runs the checks, records commands, exit codes and output, and never fixes. Until `/verify` exists, dispatch `verifier` on the trail directly, or do it by hand and record what you did in `06-verification.md`, with any screenshots or logs in `evidence/`.
 
 ---
 
-### Step 5: Verify *(planned: `/verify`)*
+### Gate 2: Review the Results Together
 
-Exercise the feature end to end at runtime against the plan's verification plan — not just tests and type checks passing (`patterns/verification.md`). Until `/verify` exists, do this by hand and record what you did in `06-verification.md`, with any screenshots or logs in `evidence/`.
+Read `04-spec-review.md`, `05-quality-review.md` and `06-verification.md` side by side. Each ends with a `Verdict:` line.
+
+| Spec review | Quality review | Verification | Next |
+| ----------- | -------------- | ------------ | ---- |
+| pass | pass | pass | Proceed to the PR |
+| pass | pass-with-findings | pass | Decide per finding: accept, or `/build-from-spec` its fix plan |
+| fail — implementation gap | any | — | `/build-from-spec fix-plans/spec-<N>.md`, then re-run the review |
+| fail — the plan was wrong | any | — | Back to Gate 1 — revise the plan first |
+| pass | fail | — | `/build-from-spec fix-plans/quality-<N>.md`, then re-run the review |
+| pass | pass | fail | Back to investigation (`/start-ticket`), not to patching |
+
+`Attempt: N` in each review counts the loop.
+
+If the same gap keeps surviving the loop, stop looping. Read the reports and decide whether the plan was unrealistic or the approach needs to change. This is where human judgment matters.
 
 ---
 
@@ -210,17 +213,20 @@ Only after Gate 2 and verification pass. Push the branch and open the PR from `.
 
 ## Quick Reference
 
-| Step | Skill | Question it answers |
-| ---- | ----- | ------------------- |
-| 0 | `/branch <ref>` | Am I on a clean, current branch? |
-| 1 | `/start-ticket <ref>` | What needs to be built, and how? |
-| Gate 1 | — (human) | Is the plan good enough to build? |
-| 2 | `/implement <trail>` | Build exactly the approved plan. |
-| 3 | `/review-against-spec <trail>` | Did we build what we said? |
-| 4 | `/quality-review [trail]` | Is it built well? |
-| Gate 2 | — (human) | Does this ship? |
-| 5 | `/verify` *(planned)* | Does it work at runtime? |
-| 6 | — | Package it for review. |
+| Step | Skill | Agent | Question it answers |
+| ---- | ----- | ----- | ------------------- |
+| 0 | `/branch <ref>` | — | Am I on a clean, current branch? |
+| 1 | `/start-ticket <ref>` | `scout` ×3 (bug: `scout-diagnose`) | What needs to be built, and how? |
+| Gate 1 | — (human) | — | Is the plan good enough to build? |
+| 2 | `/implement <trail>` | — | Build exactly the approved plan. |
+| 3 | `/review-against-spec <trail>` | `reviewer` (fork) | Did we build what we said? |
+| 4 | `/quality-review [trail]` | `reviewer` (judgment pass) | Is it built well? |
+| fix loop | `/build-from-spec <fix plan>` | — | Execute what a failing review wrote. |
+| 5 | `/verify` *(planned)* | `verifier` | Does it work at runtime? |
+| Gate 2 | — (human) | — | Does this ship? |
+| 6 | — | — | Package it for review. |
+
+Agent roster: [`.claude/agents/README.md`](../.claude/agents/README.md).
 
 ---
 
@@ -250,7 +256,7 @@ One ticket, one directory, numbered artifacts. Every stage reads from and writes
 
 **Implementation hits a wall:** `/implement` stops and routes back to Gate 1. That's the intended behavior, not a failure. Revise the plan with what was learned.
 
-**Spec review keeps failing:** check whether the gap is in the code (back to `/implement`) or in the plan (back to Gate 1). Re-running implementation against an unrealistic plan won't converge.
+**Spec review keeps failing:** check whether the gap is in the code (`/build-from-spec` its fix plan) or in the plan (back to Gate 1). Re-running implementation against an unrealistic plan won't converge.
 
 **A skill produces unexpected results:** check that the trail's earlier artifacts exist and are complete. A skill can only be as good as the context it reads.
 

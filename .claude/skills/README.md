@@ -16,6 +16,7 @@ The single asset class of this agentic layer (see AD-2). Two kinds, one director
 | [`implement`](implement/SKILL.md) | approved plan → implementation, committed locally | ✅ v0.1 |
 | [`review-against-spec`](review-against-spec/SKILL.md) | implementation vs. the approved plan — report only | ✅ v0.1 |
 | [`quality-review`](quality-review/SKILL.md) | anti-patterns & best practices — auto-fix + report, ends at Gate 2 | ✅ v0.1 |
+| [`build-from-spec`](build-from-spec/SKILL.md) | review `fail` → the fix plan it wrote, executed within its file list, committed locally | ✅ v0.1 |
 | `verify` | change → demonstrated fix (runtime, not just types) | 🚧 planned |
 | `deploy-config` | sync this layer to `~/.claude/` or a target repo, with selective flags | 🚧 planned |
 

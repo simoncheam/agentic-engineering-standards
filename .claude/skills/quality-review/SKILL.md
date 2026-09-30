@@ -1,6 +1,6 @@
 ---
 name: quality-review
-description: Final quality gate for an implemented change — auto-fixes mechanical findings, reports judgment findings. Entrypoint skill; invoke explicitly after /review-against-spec. Never auto-triggers.
+description: Quality review of an implemented change — auto-fixes mechanical findings, reports judgment findings. Entrypoint skill; invoke explicitly after /review-against-spec. Never auto-triggers.
 disable-model-invocation: true
 argument-hint: "[path to ticket trail (defaults to the current change)]"
 ---
@@ -50,9 +50,9 @@ The reviewer writes `05-quality-review.md` in the trail:
 
 Read what it wrote before you report. If the artifact is missing or its last line isn't a `Verdict:` line, the review didn't happen — say so.
 
-## 4. Stop at Gate 2
+## 4. Stop
 
-Present the verdict alongside the spec-review result. On fail: `Next: /build-from-spec <fix plan>, then re-run /quality-review`. **Do not ship, commit, or open a PR.** The human decides what proceeds.
+Present the verdict alongside the spec-review result. On fail: `Next: /build-from-spec <fix plan>, then re-run /quality-review`. On pass, next is the verification stage; **Gate 2** reads both reviews together with the verification evidence. **Do not ship, commit, or open a PR.**
 
 ## Exit criteria
 

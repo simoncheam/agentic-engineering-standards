@@ -1,18 +1,16 @@
 # Agents
 
-Subagents are the *implementations* that consume skill *capabilities* (AD-3). An agent's frontmatter names the skills it carries; scaling happens by running agents in parallel; cross-domain agents are made by stacking skills, not by writing new rules.
+Subagents are the *implementations* (AD-3): isolated contexts that entrypoint skills fork into or dispatch. An agent earns its file by needing a fresh context, parallelism, or a role-specific toolset — an agent that only re-prompts a skill is worse than none. Tools are the guarantee, not the prompt: no agent has `Edit`, and after every run `git status --porcelain -- . ':!.claude-context'` is empty — only the artifact trail changes.
 
-## Planned roster
+## Roster
 
-| Agent | Role | Consumes | Status |
-|---|---|---|---|
-| `scout` | reconnaissance — one search direction, structured output with file refs (`path:offset-limit`) | — | 🚧 planned |
-| `planner` | consolidates scout output into a grounded, gate-ready plan | `writing-plans` | 🚧 planned |
-| `reviewer` | reviews an implementation against its approved spec | `validating-code-cleanup` | 🚧 planned |
-| `verifier` | re-runs claims: exercises the affected flow, confirms the fix against the reproduction | `verifying-completion` | 🚧 planned |
+| Agent | Role | Tools | Model | Runs inside |
+|---|---|---|---|---|
+| [`reviewer`](reviewer.md) | fresh-eyes review; writes the review artifact and, on fail, a fix plan — never edits source | Read, Grep, Glob, Bash, Write | opus | — |
+
+No agent carries skills through a `skills:` field yet; agent-carried standards skills (AD-9) are later work.
 
 ## Patterns
 
-- **Scouts run in parallel with distinct search directions** (affected surfaces / existing conventions / tests & validation). See `patterns/scout-recon.md`.
-- **Cheap models for reconnaissance, expensive models for planning and judgment.** Token economics is part of the design, not an afterthought.
+- **Cheap models for reconnaissance, expensive models for judgment.** Token economics is part of the design, not an afterthought.
 - **The verifier is not the reviewer.** Review checks the change against the spec; verification checks the running behavior against the original problem.

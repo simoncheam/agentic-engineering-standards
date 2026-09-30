@@ -57,7 +57,7 @@ patterns/         # reusable mechanics: scouts, gates, verification, the harness
 .claude/
 ├── skills/       # primary asset class: workflow stages + auto-activating standards
 ├── commands/     # prompt-only entrypoints (/prime)
-├── agents/       # implementations that consume skills (scout, reviewer, verifier)
+├── agents/       # isolated contexts that entrypoint skills fork into or dispatch
 └── hooks/        # deterministic harness — planned, none built yet: format, lint, typecheck
 .claude-context/
 ├── bugs/         # per-bug artifact trails (issue → investigation → plan → review → verification)
@@ -67,7 +67,7 @@ patterns/         # reusable mechanics: scouts, gates, verification, the harness
 examples/         # worked examples — real work taken through the workflows
 ```
 
-Skills are the primary asset class — user-invocable by name and auto-activating by trigger; agents consume skill capabilities via frontmatter. `commands/` is kept for prompt-only entrypoints. See [docs/architecture-decisions.md](docs/architecture-decisions.md).
+Skills are the primary asset class — user-invocable by name and auto-activating by trigger; agents are the isolated contexts those skills run inside ([roster](.claude/agents/README.md)). `commands/` is kept for prompt-only entrypoints. See [docs/architecture-decisions.md](docs/architecture-decisions.md).
 
 ## Deployment (multi-repo)
 

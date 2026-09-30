@@ -6,7 +6,7 @@ Subagents are the *implementations* (AD-3): isolated contexts that entrypoint sk
 
 | Agent | Role | Tools | Model | Runs inside |
 |---|---|---|---|---|
-| [`reviewer`](reviewer.md) | fresh-eyes review; writes the review artifact and, on fail, a fix plan — never edits source | Read, Grep, Glob, Bash, Write | opus | `/review-against-spec` (`context: fork`) |
+| [`reviewer`](reviewer.md) | fresh-eyes review; writes the review artifact and, on fail, a fix plan — never edits source | Read, Grep, Glob, Bash, Write | opus | `/review-against-spec` (`context: fork`) · `/quality-review` judgment pass (dispatched) |
 
 No agent carries skills through a `skills:` field yet; agent-carried standards skills (AD-9) are later work.
 

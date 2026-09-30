@@ -2,7 +2,7 @@
 
 Deterministic enforcement — checks that run automatically on tool events, so the standards hold even when nobody remembers to invoke them.
 
-Planned (general-purpose; each detects the project's tooling rather than assuming a stack):
+**No hooks exist yet** — this directory holds only this README. Planned (general-purpose; each detects the project's tooling rather than assuming a stack):
 
 | Hook | Event | Enforces | Status |
 |---|---|---|---|

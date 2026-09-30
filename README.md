@@ -58,7 +58,7 @@ patterns/         # reusable mechanics: scouts, gates, verification, the harness
 ├── skills/       # primary asset class: workflow stages + auto-activating standards
 ├── commands/     # prompt-only entrypoints (/prime)
 ├── agents/       # implementations that consume skills (scout, reviewer, verifier)
-└── hooks/        # deterministic harness: format, lint, typecheck on every edit
+└── hooks/        # deterministic harness — planned, none built yet: format, lint, typecheck
 .claude-context/
 ├── bugs/         # per-bug artifact trails (issue → investigation → plan → review → verification)
 ├── specs/        # feature specs and plans

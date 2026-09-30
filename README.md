@@ -64,6 +64,7 @@ patterns/         # reusable mechanics: scouts, gates, verification, the harness
 ├── templates/    # bug report, PR — the shapes artifacts start from
 └── local/        # personal scratch, gitignored
 examples/         # worked examples — real work taken through the workflows
+.github/          # CI for this repo: the AD-9 frontmatter and README checks
 ```
 
 Skills are the primary asset class — user-invocable by name and auto-activating by trigger; agents are the isolated contexts those skills run inside ([roster](.claude/agents/README.md)). `commands/` is kept for prompt-only entrypoints. See [docs/architecture-decisions.md](docs/architecture-decisions.md).

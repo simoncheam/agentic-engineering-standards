@@ -69,6 +69,10 @@ A headless run (`claude -p "/<skill> <args>"`) reaches the layer via the user-le
 - `--settings '{"attribution":false}'` — a commit carrying the default `Co-Authored-By` trailer is denied in `-p` mode (no prompt can approve it), so `/implement` and `/build-from-spec` cannot commit without this. Requires Claude Code ≥ 2.1.281.
 - `--permission-mode acceptEdits` plus `--allowedTools 'Bash(git:*)' 'Bash(<test runner>:*)'` — the trail writes and the read-only git the agents use.
 
+## Checks (CI)
+
+`bash .github/scripts/check-frontmatter.sh` from the repo root — exit 0 or 1 (AD-7). It asserts AD-9 on every skill (`disable-model-invocation: true` ⇔ `argument-hint`, never combined with `user-invocable: false`), that every `context: fork` names an agent file that exists, that every agent has `name` = filename, `description`, `tools` and `model` and no `Edit`, that the agents README names every agent, and that the README structure block only lists directories that exist (hooks say *planned* while none exist). `.github/workflows/frontmatter.yml` runs it on every push to `main` and every pull request. It lives under `.github/`, not `.claude/`, because it checks this repo and must not deploy to targets.
+
 ## Editing skills
 
 1. Edit the skill in this repo (`.claude/skills/<name>/SKILL.md`). Because of the symlinks, the change is live in every session immediately — no redeploy step.
@@ -98,6 +102,7 @@ Headless runs need only a minimal environment: `HOME`, `PATH`, `USER`, `SHELL`, 
 | 2026-08-20 | Skill-bundled template convention | This file · `.claude-context/README.md` |
 | 2026-08-20 | Orchestration location & `--repo` targeting | AD-11 in `architecture-decisions.md` |
 | 2026-09-24 | Feature development runs on entrypoint skills (`/branch` → `/start-ticket` → Gate 1 → `/implement` → `/review-against-spec` → `/quality-review` → Gate 2) | `workflows/feature-development.md` |
+| 2026-09-29 | AD-9 frontmatter + README check script, run in CI on push and PR | This file · `.github/` |
 | 2026-09-29 | Agents installed by the user-level symlink loop; name precedence recorded; interactive use runs from inside the target repo | This file |
 | 2026-09-29 | Headless runs: `attribution: false` + explicit allowlists | This file |
 | 2026-09-29 | Review fix loop: a `fail` writes `fix-plans/<kind>-<N>.md` → `/build-from-spec` → re-run the review; verdict line + `Attempt: N` contract | `.claude-context/README.md` · `build-from-spec/SKILL.md` · AD-13 |

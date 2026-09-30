@@ -1,0 +1,14 @@
+name: frontmatter
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: AD-9 frontmatter and README checks
+        run: bash .github/scripts/check-frontmatter.sh

@@ -16,6 +16,5 @@ README.md
 Summarize your understanding of the codebase, including:
 
 1. Repository structure and organization
-2. Available AI documentation domains (from ai_docs/README.md)
-3. Key resources (commands, agents, skills)
-4. Active documentation patterns and skill integration
+2. Key resources (commands, agents, skills)
+3. Active documentation patterns and skill integration

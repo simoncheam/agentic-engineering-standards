@@ -3,28 +3,28 @@
 Source: <04-spec-review.md | 05-quality-review.md>
 Attempt: <N>
 
-> Consumable by /build-from-spec. Every section below is required; write "None" rather than omitting.
+> `/build-from-spec` executes this file as written. Fill every section; a section with nothing in it says `None`.
 
-## Purpose / Brief
-<1-2 sentences: what failed review and what this plan fixes>
+## Findings Addressed
+- <one line per review finding this plan fixes, cited the way the review names it>
 
 ## Files to Modify
-- `path/to/file` — <why>
+- `path/to/file` — <the finding it answers>
 
 ## Files to Create
-- `path/to/new-file` — <why> (or "None")
+- `path/to/new-file` — <the finding it answers>
 
-## Step-by-Step Tasks
-1. <ordered, surgical task with file:line and the specific change>
+## Tasks
+1. <one change: `file:line`, what is there now, what it becomes>
 2. …
 
-## Edge Cases & Considerations
-- <constraints, exceptions the reviewer honored, patterns to preserve>
+## Constraints
+- <what must stay as it is: behavior, patterns, anything the review accepted as an exception>
 
 ## Validation Commands
 ```bash
-<lint/type/test commands that prove the fixes>
+<commands whose exit status shows the findings are fixed>
 ```
 
 ## Out of Scope
-- <explicitly excluded items, e.g. pre-existing violations outside the diff>
+- <what this plan leaves alone on purpose, e.g. problems that predate the change>

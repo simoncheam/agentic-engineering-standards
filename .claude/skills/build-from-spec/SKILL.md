@@ -17,7 +17,7 @@ The executable half of a review `fail`. `/implement` builds the plan approved at
 
 ## 2. Execute the tasks — and only the tasks
 
-- Follow **Step-by-Step Tasks** in order. Complete each before the next.
+- Follow **Tasks** in order. Complete each before the next.
 - **File boundary is binding:** modify only files under **Files to Modify**, create only files under **Files to Create**. A task that needs any other file means the plan is incomplete — stop and report it.
 - **Out of Scope is binding.** Match the surrounding code — idiom, naming, comment density, project conventions per `CLAUDE.md`.
 
